@@ -86,7 +86,18 @@ export function validarCliente(cliente) {
 //   { registrado: 3, en_preparacion: 3, listo: 2, entregado: 2 }
 // Con una lista vacía, todos van en 0.
 export function resumenPorEstado(pedidos) {
-  return {} // TODO
+  const resumen = {}
+  for (const estado of ESTADOS) {
+    resumen[estado] = 0
+  }
+
+  for (const pedido of pedidos) {
+    if (pedido.estado in resumen) {
+      resumen[pedido.estado] += 1
+    }
+  }
+
+  return resumen
 }
 
 // ----------------------------------------------------------------------------
