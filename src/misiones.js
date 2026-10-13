@@ -25,8 +25,15 @@ import { ESTADOS } from './datos.js'
 //   - Un pedido sin items cuesta 0.
 // Pista: prueba en la consola 0.1 + 0.2 y verás por qué hay que redondear.
 //        Math.round(x * 100) / 100
+
 export function totalPedido(pedido) {
-  return 0 // TODO
+  const items = pedido.items ?? []
+  const subtotal = items.reduce(
+    (suma, item) => suma + item.cantidad * item.precioUnitario,
+    0
+  )
+  const descuento = pedido.descuento ?? 0
+  return Math.round(subtotal * (1 - descuento) * 100) / 100
 }
 
 // ----------------------------------------------------------------------------
@@ -39,7 +46,9 @@ export function totalPedido(pedido) {
 // Un estado que no existe también es false.
 // Pista: ESTADOS ya es un arreglo ordenado. ¿Qué te dice indexOf?
 export function puedeTransicionar(actual, nuevo) {
-  return true // TODO: hoy acepta cualquier cosa. ¿Qué tan grave sería eso en producción?
+  const i = ESTADOS.indexOf(actual)
+  const j = ESTADOS.indexOf(nuevo)
+  return i !== -1 && j !== -1 && j === i + 1
 }
 
 // ----------------------------------------------------------------------------
