@@ -108,10 +108,20 @@ export function resumenPorEstado(pedidos) {
 // "José Martínez". Un texto vacío (o solo espacios) devuelve todos.
 // Pista: 'Ramírez'.normalize('NFD').replace(/[̀-ͯ]/g, '')
 //        Investiga qué hace NFD. Es un problema real en sistemas en español.
-export function buscarPedidos(pedidos, texto) {
-  return [] // TODO
+function normalizar(texto) {
+  return String(texto ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
 }
 
+export function buscarPedidos(pedidos, texto) {
+  const buscado = normalizar(texto)
+  if (buscado === '') return pedidos
+
+  return pedidos.filter((pedido) => normalizar(pedido.cliente).includes(buscado))
+}
 // ----------------------------------------------------------------------------
 // MISIÓN 6 · DESTACADO — Los mejores clientes
 // ----------------------------------------------------------------------------
