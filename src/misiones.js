@@ -131,5 +131,16 @@ export function buscarPedidos(pedidos, texto) {
 // Orden: total de mayor a menor; si empatan, por nombre alfabético.
 // Pista: un objeto acumulador, luego Object.entries, map y sort.
 export function topClientes(pedidos, n) {
-  return [] // TODO
+  const acumulado = {}
+  for (const pedido of pedidos) {
+    acumulado[pedido.cliente] = (acumulado[pedido.cliente] ?? 0) + totalPedido(pedido)
+  }
+
+  return Object.entries(acumulado)
+    .map(([cliente, total]) => ({
+      cliente,
+      total: Math.round(total * 100) / 100,
+    }))
+    .sort((a, b) => b.total - a.total || a.cliente.localeCompare(b.cliente, 'es'))
+    .slice(0, n)
 }
